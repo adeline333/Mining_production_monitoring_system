@@ -13,6 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 // Connect to database
 connectDB();
 
+// Apply demo read-only restriction for data modification
+const { preventDemoModification } = require("./src/middleware/auth");
+app.use(preventDemoModification);
+
+
 // Basic route to test server
 app.get("/", (req, res) => {
   res.json({

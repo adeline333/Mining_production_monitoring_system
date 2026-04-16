@@ -61,4 +61,49 @@ const authorize = (...roles) => {
   };
 };
 
-module.exports = { authenticate, authorize };
+// Prevent data modification for demo accounts
+const preventDemoModification = async (req, res, next) => {
+  // Allow GET requests
+  if (req.method === 'GET') {
+    return next();
+  }
+
+  // Exempt auth routes that don't represent a logged-in user's modifications
+  // Also login does not require user-id header, but this ensures safety
+  if (req.originalUrl.includes('/api/auth/login') || req.originalUrl.includes('/api/auth/register')) {
+    return next();
+  }
+
+  try {
+    const userId = req.headers["user-id"];
+    
+    // If no user context, pass through (other middlewares handle authentication)
+    if (!userId) {
+      return next();
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return next();
+    }
+
+    const demoEmails = [
+      'admin@mining.com', 
+      'supervisor@mining.com', 
+      'operator@mining.com'
+    ];
+
+    if (demoEmails.includes(user.email)) {
+      return res.status(403).json({
+        success: false,
+        message: "Action not permitted for demo accounts. Read-only access."
+      });
+    }
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { authenticate, authorize, preventDemoModification };

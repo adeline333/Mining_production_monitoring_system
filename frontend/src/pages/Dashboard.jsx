@@ -204,10 +204,10 @@ const Dashboard = () => {
           </h3>
           <div className="space-y-3">
             {[
-              { action: 'Production record created', time: '5 minutes ago', user: 'John Doe' },
-              { action: 'Equipment maintenance completed', time: '1 hour ago', user: 'Jane Smith' },
-              { action: 'Report generated', time: '2 hours ago', user: 'Admin' },
-              { action: 'New mineral added', time: '3 hours ago', user: 'Supervisor' },
+              { action: 'Production record created', time: '5 minutes ago', user: 'Thierry Mugisha' },
+              { action: 'Equipment maintenance completed', time: '1 hour ago', user: 'Aline Uwase' },
+              { action: 'Report generated', time: '2 hours ago', user: 'Didier Nshuti' },
+              { action: 'New mineral added', time: '3 hours ago', user: 'Ines Iradukunda' },
             ].map((activity, index) => (
               <div
                 key={index}
