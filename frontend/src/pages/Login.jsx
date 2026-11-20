@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Mountain, Mail, Lock, AlertCircle } from 'lucide-react';
+import { Mountain, Mail, Lock, AlertCircle, ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -54,9 +54,22 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Error Message */}
             {error && (
-              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg flex items-center gap-2">
-                <AlertCircle className="w-5 h-5" />
-                <span className="text-sm">{error}</span>
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg space-y-2">
+                <div className="flex items-center gap-2">
+                  <AlertCircle className="w-5 h-5 flex-shrink-0" />
+                  <span className="text-sm font-medium">{error}</span>
+                </div>
+                <div className="pt-1 border-t border-red-100 flex items-center justify-between">
+                  <span className="text-xs text-red-600">Account not recognized?</span>
+                  <Link
+                    to="/contact-admin"
+                    state={{ attemptedEmail: formData.email }}
+                    className="text-xs font-semibold text-blue-700 hover:text-blue-900 flex items-center gap-1"
+                  >
+                    <span>Contact Admin for account creation</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </div>
               </div>
             )}
 
@@ -98,26 +111,58 @@ const Login = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full btn-primary py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full btn-primary py-3 text-lg font-semibold disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
+
+            {/* Need Account / Help Link */}
+            <div className="text-center pt-1">
+              <Link
+                to="/contact-admin"
+                state={{ attemptedEmail: formData.email }}
+                className="text-xs text-blue-600 hover:text-blue-800 font-medium transition-colors"
+              >
+                Account doesn't exist or forgot password? Contact Admin
+              </Link>
+            </div>
           </form>
 
           {/* Demo Credentials */}
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <p className="text-sm text-gray-600 font-medium mb-2">Demo Credentials:</p>
-            <div className="text-xs text-gray-500 space-y-1">
-              <p>Admin: admin@mining.com / admin123</p>
-              <p>Supervisor: supervisor@mining.com / super123</p>
-              <p>Field Operator: operator@mining.com / field123</p>
+            <p className="text-sm text-gray-600 font-medium mb-2">Demo Credentials (click to fill):</p>
+            <div className="text-xs text-gray-600 space-y-1.5">
+              <button
+                type="button"
+                onClick={() => setFormData({ email: 'admin@mining.com', password: 'admin123' })}
+                className="w-full text-left p-1.5 rounded hover:bg-blue-100 transition-colors flex justify-between cursor-pointer"
+              >
+                <span><strong>Admin:</strong> admin@mining.com</span>
+                <span className="text-gray-400">admin123</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ email: 'supervisor@mining.com', password: 'super123' })}
+                className="w-full text-left p-1.5 rounded hover:bg-blue-100 transition-colors flex justify-between cursor-pointer"
+              >
+                <span><strong>Supervisor:</strong> supervisor@mining.com</span>
+                <span className="text-gray-400">super123</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setFormData({ email: 'operator@mining.com', password: 'field123' })}
+                className="w-full text-left p-1.5 rounded hover:bg-blue-100 transition-colors flex justify-between cursor-pointer"
+              >
+                <span><strong>Field Operator:</strong> operator@mining.com</span>
+                <span className="text-gray-400">field123</span>
+              </button>
             </div>
           </div>
         </div>
 
         {/* Footer */}
         <p className="text-center text-gray-400 text-sm mt-8">
-          © 2024 Mining Production System. All rights reserved.
+          © {new Date().getFullYear()} Mining Production System. All rights reserved.
         </p>
       </div>
     </div>

@@ -49,8 +49,11 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Find user by email
-    const user = await User.findOne({ email });
+    // Find user by email (supports operator@mining.com as alias for field@mining.com)
+    let user = await User.findOne({ email });
+    if (!user && email?.toLowerCase() === "operator@mining.com") {
+      user = await User.findOne({ email: "field@mining.com" });
+    }
     if (!user) {
       return res.status(401).json({
         success: false,

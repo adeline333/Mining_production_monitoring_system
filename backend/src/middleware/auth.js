@@ -90,7 +90,8 @@ const preventDemoModification = async (req, res, next) => {
     const demoEmails = [
       'admin@mining.com', 
       'supervisor@mining.com', 
-      'operator@mining.com'
+      'operator@mining.com',
+      'field@mining.com'
     ];
 
     if (demoEmails.includes(user.email)) {

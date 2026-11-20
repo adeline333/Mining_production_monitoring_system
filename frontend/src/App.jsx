@@ -1,7 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import ProtectedRoute from './components/common/ProtectedRoute';
 import Login from './pages/Login';
+import ContactAdmin from './pages/ContactAdmin';
+import Settings from './pages/Settings';
 import Dashboard from './pages/Dashboard';
 import Production from './pages/Production';
 import Equipment from './pages/Equipment';
@@ -18,6 +20,8 @@ function App() {
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={<Login />} />
+          <Route path="/contact-admin" element={<ContactAdmin />} />
+          <Route path="/account-support" element={<ContactAdmin />} />
 
           {/* Protected Routes */}
           <Route
@@ -100,6 +104,15 @@ function App() {
             }
           />
 
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute allowedRoles={['Admin', 'Supervisor', 'Technician', 'FieldOperator', 'Auditor']}>
+                <Settings />
+              </ProtectedRoute>
+            }
+          />
+
           {/* Redirect root to dashboard */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
 
@@ -107,13 +120,21 @@ function App() {
           <Route
             path="*"
             element={
-              <div className="min-h-screen flex items-center justify-center bg-gray-50">
-                <div className="text-center">
-                  <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-                  <p className="text-xl text-gray-600 mb-8">Page not found</p>
-                  <a href="/dashboard" className="btn-primary">
-                    Go to Dashboard
-                  </a>
+              <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+                <div className="text-center max-w-md bg-white p-8 rounded-2xl shadow-lg border border-gray-100">
+                  <h1 className="text-6xl font-bold text-gray-800 mb-2">404</h1>
+                  <h2 className="text-xl font-semibold text-gray-700 mb-2">Page Not Found</h2>
+                  <p className="text-sm text-gray-500 mb-6">
+                    The requested page does not exist or you may need to sign in with an authorized account.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                    <Link to="/login" className="btn-primary text-center">
+                      Go to Sign In
+                    </Link>
+                    <Link to="/contact-admin" className="btn-secondary text-center">
+                      Contact Admin
+                    </Link>
+                  </div>
                 </div>
               </div>
             }
